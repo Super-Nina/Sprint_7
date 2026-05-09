@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import model.CourierModel;
 import org.junit.Test;
 import static data.CourierData.*;
+import static java.net.HttpURLConnection.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class CreateCourierTest extends BaseApiTest {
@@ -11,7 +12,7 @@ public class CreateCourierTest extends BaseApiTest {
     @Test
     @DisplayName("Создание курьера с валидными данными")
     @Description("Проверка успешного создания курьера при передаче корректных данных")
-    public void TestCreateCourierFunctionalitySuccess() {
+    public void testCreateCourierFunctionalitySuccess() {
         LOGIN = LOGIN + System.currentTimeMillis();
         CourierModel courier = new CourierModel(LOGIN, PASSWORD, FIRST_NAME);
 
@@ -26,51 +27,51 @@ public class CreateCourierTest extends BaseApiTest {
     @Test
     @DisplayName("Создание полностью повторяющегося курьера")
     @Description("Проверка, что нельзя создать полностью повторяющегося курьером")
-    public void TestCreateDuplicateCourier() {
+    public void testCreateDuplicateCourier() {
         CourierModel courier = new CourierModel(LOGIN, PASSWORD, FIRST_NAME);
         courierSteps.createCourier(courier);
         courierSteps.createCourier(courier)
                 .then()
                 .log().all()
-                .statusCode(409)
+                .statusCode(HTTP_CONFLICT)
                 .body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
         }
 
     @Test
     @DisplayName("Создание курьера без логина")
     @Description("Проверка, что нельзя создать курьера с пустым логином")
-    public void TestCreateCourierWithoutLogin() {
+    public void testCreateCourierWithoutLogin() {
         CourierModel courier = new CourierModel(null, PASSWORD, FIRST_NAME);
         courierSteps.createCourier(courier)
                 .then()
                 .log().all()
-                .statusCode(400)
+                .statusCode(HTTP_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
     @Test
     @DisplayName("Создание курьера без пароля")
     @Description("Проверка, что нельзя создать курьера с пустым паролем")
-    public void TestCreateCourierWithoutPassword() {
+    public void testCreateCourierWithoutPassword() {
         LOGIN = LOGIN + System.currentTimeMillis();
         CourierModel courier = new CourierModel(LOGIN, null, FIRST_NAME);
         courierSteps.createCourier(courier)
                 .then()
                 .log().all()
-                .statusCode(400)
+                .statusCode(HTTP_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
     @Test
     @DisplayName("Создание курьера только с логином и паролем (без firstName)")
     @Description("Проверка, что для создания курьера необходимы только логин и пароль")
-    public void TestCreateCourierWithoutFirstName() {
+    public void testCreateCourierWithoutFirstName() {
         LOGIN = LOGIN + System.currentTimeMillis();
         CourierModel courier = new CourierModel(LOGIN, PASSWORD, null);
         courierSteps.createCourier(courier)
                 .then()
                 .log().all()
-                .statusCode(201)
+                .statusCode(HTTP_CREATED)
                 .body("ok", equalTo(true));
         int courierId = courierSteps.getCourierId(courier);
         courierSteps.deleteCourier(courierId);
@@ -79,7 +80,7 @@ public class CreateCourierTest extends BaseApiTest {
     @Test
     @DisplayName("Создание курьера с повторяющимся логином")
     @Description("Проверка, что нельзя создать курьера с повторяющимся логином")
-    public void TestCreateCourierDuplicateLogin() {
+    public void testCreateCourierDuplicateLogin() {
         LOGIN = LOGIN + System.currentTimeMillis();
         CourierModel courier = new CourierModel(LOGIN, PASSWORD, FIRST_NAME);
         courierSteps.createCourier(courier);
@@ -88,7 +89,7 @@ public class CreateCourierTest extends BaseApiTest {
         courierSteps.createCourier(courierSecond)
                 .then()
                 .log().all()
-                .statusCode(409)
+                .statusCode(HTTP_CONFLICT)
                 .body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
     }
     }

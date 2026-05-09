@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
+import static java.net.HttpURLConnection.HTTP_OK;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class ListOfOrdersTest extends BaseApiTest {
@@ -19,7 +20,7 @@ public class ListOfOrdersTest extends BaseApiTest {
 
         response
                 .then()
-                .statusCode(200)
+                .statusCode(HTTP_OK)
                 .contentType("application/json")
                 .body("orders[0].id", notNullValue());
     }

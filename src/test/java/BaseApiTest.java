@@ -6,7 +6,7 @@ import static data.CourierData.BASE_URI;
 
 public class BaseApiTest {
     protected static  CourierSteps courierSteps;
-    OrderSteps orderSteps;
+    protected static OrderSteps orderSteps;
 
     @Before
     public void setUp() {

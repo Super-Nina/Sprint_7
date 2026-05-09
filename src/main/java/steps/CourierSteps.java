@@ -8,8 +8,8 @@ import static io.restassured.RestAssured.given;
 
 public class CourierSteps {
 
-     @Step("Создание курьера")
-    public static Response createCourier(CourierModel courier){
+    @Step("Создание курьера")
+    public static Response createCourier(CourierModel courier) {
         return given()
                 .log().all()
                 .header("Content-type", "application/json")
@@ -17,7 +17,7 @@ public class CourierSteps {
                 .body(courier)
                 .when()
                 .post(COURIER_CREATE_ENDPOINT);
-     }
+    }
 
     @Step("Получение id курьера")
     public int getCourierId(CourierModel courier) {
@@ -32,9 +32,9 @@ public class CourierSteps {
     }
 
     @Step("Авторизация курьера")
-    public Response courierAuth(CourierModel courier){
-       return  given()
-               .log().all()
+    public Response courierAuth(CourierModel courier) {
+        return given()
+                .log().all()
                 .header("Content-type", "application/json")
                 .and()
                 .body(courier)
@@ -43,11 +43,35 @@ public class CourierSteps {
     }
 
     @Step("Удаление курьера")
-    public void deleteCourier(int courierId){
+    public void deleteCourier(int courierId) {
         Response responseId = given()
                 .header("Content-type", "application/json")
                 .and()
                 .when()
                 .delete(COURIER_CREATE_ENDPOINT + courierId);
     }
+
+    @Step("Создание курьера для авторизации")
+    public static Response createCourierForAuth(CourierModel courierForAuth) {
+        return  given()
+                .log().all()
+                .header("Content-type", "application/json")
+                .and()
+                .body(courierForAuth)
+                .when()
+                .post(COURIER_CREATE_ENDPOINT);
+    }
+    @Step("Удаление курьера для авторизации")
+//    public void deleteCourierForAuth(int courierId) {
+
+    public static Response deleteCourierForAuth(int courierId) {
+        Response responseId = given()
+                .log().all()
+                .header("Content-type", "application/json")
+                .and()
+                .when()
+                .delete(COURIER_CREATE_ENDPOINT + courierId);
+        return responseId;
+    }
+
 }

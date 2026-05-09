@@ -29,12 +29,13 @@ public class OrderSteps {
     }
 
     @Step("Удаление заказа")
-    public void deleteOrder(int track) {
+    public Response deleteOrder(int track) {
         Response responseId = given()
                 .header("Content-type", "application/json")
                 .log().all()
                 .and()
                 .when()
                 .put(ORDER_DELETE_ENDPOINT + track);
+        return responseId;
     }
 }

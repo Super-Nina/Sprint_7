@@ -2,6 +2,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import model.OrderModel;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -9,7 +10,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static java.net.HttpURLConnection.HTTP_CREATED;
 import static org.hamcrest.CoreMatchers.notNullValue;
+
 
 @RunWith(Parameterized.class)
 public class ParamOrderCreateTest extends BaseApiTest{
@@ -22,6 +25,12 @@ public class ParamOrderCreateTest extends BaseApiTest{
     private static String deliveryDate;
     private static String comment;
     private static List<String> color;
+    private static int track;
+
+    @After
+    public void cleanUp() {
+        orderSteps.deleteOrder(track);
+            }
 
     public ParamOrderCreateTest(String firstName, String lastName, String address, int metroStation, String phone, int rentTime, String deliveryDate, String comment, List<String> color ) {
         this.firstName=firstName;
@@ -53,10 +62,9 @@ public class ParamOrderCreateTest extends BaseApiTest{
         Response response = orderSteps.createOrder(order)
                 .then()
                 .log().all()
-                .statusCode(201)
+                .statusCode(HTTP_CREATED)
                 .body("track", notNullValue())
                 .extract().response();
-        int track = orderSteps.getOrderTrack(response);
-        orderSteps.deleteOrder(track);
+        track = orderSteps.getOrderTrack(response);
     }
 }
