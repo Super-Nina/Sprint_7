@@ -5,19 +5,14 @@ import model.OrderModel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static io.restassured.RestAssured.post;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 @RunWith(Parameterized.class)
-public class OrderCreateTest extends BaseApiTest{
+public class ParamOrderCreateTest extends BaseApiTest{
     private static String firstName;
     private static String lastName;
     private static String address;
@@ -28,7 +23,7 @@ public class OrderCreateTest extends BaseApiTest{
     private static String comment;
     private static List<String> color;
 
-    public OrderCreateTest(String firstName,String lastName, String address, int metroStation, String phone, int rentTime, String deliveryDate, String comment, List<String> color ) {
+    public ParamOrderCreateTest(String firstName, String lastName, String address, int metroStation, String phone, int rentTime, String deliveryDate, String comment, List<String> color ) {
         this.firstName=firstName;
         this.lastName=lastName;
         this.address=address;
@@ -47,7 +42,6 @@ public class OrderCreateTest extends BaseApiTest{
                 new Object[]  {"Naruto", "Uchiha", "Konoha, 142 apt.", 4, "+7 800 355 35 35", 5, "2020-06-06", "Saske, come back to Konoha", Arrays.asList("GREY")},
                 new Object[]   {"Naruto", "Uchiha", "Konoha, 142 apt.", 4, "+7 800 355 35 35", 5, "2020-06-06", "Saske, come back to Konoha", Arrays.asList("BLACK", "GREY")},
                 new Object[]  {"Naruto", "Uchiha", "Konoha, 142 apt.", 4, "+7 800 355 35 35", 5, "2020-06-06", "Saske, come back to Konoha", Arrays.asList("")}
-
                 );
     }
 
@@ -63,7 +57,6 @@ public class OrderCreateTest extends BaseApiTest{
                 .body("track", notNullValue())
                 .extract().response();
         int track = orderSteps.getOrderTrack(response);
-        System.out.println("НЭ track=" + track);
         orderSteps.deleteOrder(track);
     }
 }
