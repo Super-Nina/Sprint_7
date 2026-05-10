@@ -38,4 +38,13 @@ public class OrderSteps {
                 .put(ORDER_DELETE_ENDPOINT + track);
         return responseId;
     }
+
+    @Step("Получение списка заказов")
+    public Response detListOfOrders(){
+        return given()
+                .log().all()
+                .header("Content-type", "application/json")
+                .when()
+                .get("/api/v1/orders");
+    }
 }

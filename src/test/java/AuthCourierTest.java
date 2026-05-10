@@ -10,7 +10,6 @@ import org.junit.Test;
 import static data.CourierData.BASE_URI;
 import static java.net.HttpURLConnection.*;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class AuthCourierTest extends BaseApiTest {
     private static CourierModel courierForAuth;
@@ -32,12 +31,12 @@ public class AuthCourierTest extends BaseApiTest {
     @DisplayName("Курьер может авторизоваться") // имя теста
     @Description("Проверка, что курьер может авторизоваться с валидными данными и успешный запрос возвращает id")
     public void testCourierAuthorization() {
+        int courierId = courierSteps.getCourierId(courierForAuth);
         courierSteps.courierAuth(courierForAuth)
                 .then()
                 .log().all()
                 .statusCode(HTTP_OK)
-                .body("id", notNullValue());
-
+                .body("id", equalTo(courierId));
     }
 
     @Test
@@ -88,7 +87,7 @@ public class AuthCourierTest extends BaseApiTest {
             response.then()
                     .log().all()
                     .statusCode(HTTP_NOT_FOUND)
-                    .body("message", notNullValue());
+                    .body("message", equalTo("Учетная запись не найдена"));
         }
 
     @Test
@@ -103,6 +102,6 @@ public class AuthCourierTest extends BaseApiTest {
             response.then()
                     .log().all()
                     .statusCode(HTTP_NOT_FOUND)
-                    .body("message", notNullValue());
+                    .body("message", equalTo("Учетная запись не найдена"));
         }
 }

@@ -17,10 +17,10 @@ public class CreateCourierTest extends BaseApiTest {
         CourierModel courier = new CourierModel(LOGIN, PASSWORD, FIRST_NAME);
 
         Response response = courierSteps.createCourier(courier);
-               response.then()
-                .log().all()
-                .statusCode(201);
-            int courierId = courierSteps.getCourierId(courier);
+        response.then()
+                    .log().all()
+                    .statusCode(HTTP_CREATED);
+        int courierId = courierSteps.getCourierId(courier);
         courierSteps.deleteCourier(courierId);
     }
 

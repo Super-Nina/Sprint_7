@@ -3,7 +3,6 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.Test;
 
-import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -12,14 +11,9 @@ public class ListOfOrdersTest extends BaseApiTest {
     @DisplayName("Проверка списка заказов")
     @Description("Проверка, что возвращается список заказов")
     public void getListOfOrders_ShouldReturnJsonArray() {
-        Response response = given()
+        Response response = orderSteps.detListOfOrders();
+        response.then()
                 .log().all()
-                .header("Content-type", "application/json")
-                .when()
-                .get("/api/v1/orders");
-
-        response
-                .then()
                 .statusCode(HTTP_OK)
                 .contentType("application/json")
                 .body("orders[0].id", notNullValue());

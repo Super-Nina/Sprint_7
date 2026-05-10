@@ -11,8 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.net.HttpURLConnection.HTTP_CREATED;
-import static org.hamcrest.CoreMatchers.notNullValue;
-
+import static org.hamcrest.CoreMatchers.equalTo;
 
 @RunWith(Parameterized.class)
 public class ParamOrderCreateTest extends BaseApiTest{
@@ -55,16 +54,16 @@ public class ParamOrderCreateTest extends BaseApiTest{
     }
 
     @Test
-    @DisplayName("Создание заказа") // имя теста
+    @DisplayName("Создание заказа")
     @Description("Проверка, что при создании заказа можно указать черный, серый, черный и серый или вовсе не указывать цвет. В ответ вернется track")
     public void checkOrderFormWithColorSelection() {
         OrderModel order = new OrderModel(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment, color);
-        Response response = orderSteps.createOrder(order)
-                .then()
+
+        Response response = orderSteps.createOrder(order);
+        track = orderSteps.getOrderTrack(response);
+        response.then()
                 .log().all()
                 .statusCode(HTTP_CREATED)
-                .body("track", notNullValue())
-                .extract().response();
-        track = orderSteps.getOrderTrack(response);
-    }
+                .body("track", equalTo(track));
+}
 }

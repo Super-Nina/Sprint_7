@@ -62,8 +62,6 @@ public class CourierSteps {
                 .post(COURIER_CREATE_ENDPOINT);
     }
     @Step("Удаление курьера для авторизации")
-//    public void deleteCourierForAuth(int courierId) {
-
     public static Response deleteCourierForAuth(int courierId) {
         Response responseId = given()
                 .log().all()
@@ -73,5 +71,4 @@ public class CourierSteps {
                 .delete(COURIER_CREATE_ENDPOINT + courierId);
         return responseId;
     }
-
 }
